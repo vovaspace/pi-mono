@@ -428,6 +428,28 @@ describe("AI Providers Empty Message Tests", () => {
 		});
 	});
 
+	describe.skipIf(!process.env.NEBIUS_API_KEY)("Nebius Provider Empty Messages", () => {
+		it("should handle empty content array", { retry: 3, timeout: 30000 }, async () => {
+			const llm = getModel("nebius", "moonshotai/Kimi-K2.5");
+			await testEmptyMessage(llm, { apiKey: process.env.NEBIUS_API_KEY });
+		});
+
+		it("should handle empty string content", { retry: 3, timeout: 30000 }, async () => {
+			const llm = getModel("nebius", "moonshotai/Kimi-K2.5");
+			await testEmptyStringMessage(llm, { apiKey: process.env.NEBIUS_API_KEY });
+		});
+
+		it("should handle whitespace-only content", { retry: 3, timeout: 30000 }, async () => {
+			const llm = getModel("nebius", "moonshotai/Kimi-K2.5");
+			await testWhitespaceOnlyMessage(llm, { apiKey: process.env.NEBIUS_API_KEY });
+		});
+
+		it("should handle empty assistant message in conversation", { retry: 3, timeout: 30000 }, async () => {
+			const llm = getModel("nebius", "moonshotai/Kimi-K2.5");
+			await testEmptyAssistantMessage(llm, { apiKey: process.env.NEBIUS_API_KEY });
+		});
+	});
+
 	describe.skipIf(!hasBedrockCredentials())("Amazon Bedrock Provider Empty Messages", () => {
 		const llm = getModel("amazon-bedrock", "global.anthropic.claude-sonnet-4-5-20250929-v1:0");
 

@@ -167,6 +167,14 @@ describe("Token Statistics on Abort", () => {
 		});
 	});
 
+	describe.skipIf(!process.env.NEBIUS_API_KEY)("Nebius Provider", () => {
+		const llm = getModel("nebius", "moonshotai/Kimi-K2.5");
+
+		it("should include token stats when aborted mid-stream", { retry: 3, timeout: 30000 }, async () => {
+			await testTokensOnAbort(llm, { apiKey: process.env.NEBIUS_API_KEY! });
+		});
+	});
+
 	describe.skipIf(!process.env.ZAI_API_KEY)("zAI Provider", () => {
 		const llm = getModel("zai", "glm-4.5-flash");
 

@@ -707,6 +707,23 @@ describe("AI Providers Unicode Surrogate Pair Tests", () => {
 		});
 	});
 
+	describe.skipIf(!process.env.NEBIUS_API_KEY)("Nebius Provider Unicode Handling", () => {
+		it("should handle emoji in tool results", { retry: 3, timeout: 30000 }, async () => {
+			const llm = getModel("nebius", "moonshotai/Kimi-K2.5");
+			await testEmojiInToolResults(llm, { apiKey: process.env.NEBIUS_API_KEY });
+		});
+
+		it("should handle real-world LinkedIn comment data with emoji", { retry: 3, timeout: 30000 }, async () => {
+			const llm = getModel("nebius", "moonshotai/Kimi-K2.5");
+			await testRealWorldLinkedInData(llm, { apiKey: process.env.NEBIUS_API_KEY });
+		});
+
+		it("should handle unpaired high surrogate (0xD83D) in tool results", { retry: 3, timeout: 30000 }, async () => {
+			const llm = getModel("nebius", "moonshotai/Kimi-K2.5");
+			await testUnpairedHighSurrogate(llm, { apiKey: process.env.NEBIUS_API_KEY });
+		});
+	});
+
 	describe.skipIf(!hasBedrockCredentials())("Amazon Bedrock Provider Unicode Handling", () => {
 		const llm = getModel("amazon-bedrock", "global.anthropic.claude-sonnet-4-5-20250929-v1:0");
 

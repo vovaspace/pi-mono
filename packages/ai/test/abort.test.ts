@@ -217,6 +217,18 @@ describe("AI Providers Abort Tests", () => {
 		});
 	});
 
+	describe.skipIf(!process.env.NEBIUS_API_KEY)("Nebius Provider Abort", () => {
+		it("should abort mid-stream", { retry: 3 }, async () => {
+			const llm = getModel("nebius", "moonshotai/Kimi-K2.5");
+			await testAbortSignal(llm, { apiKey: process.env.NEBIUS_API_KEY });
+		});
+
+		it("should handle immediate abort", { retry: 3 }, async () => {
+			const llm = getModel("nebius", "moonshotai/Kimi-K2.5");
+			await testImmediateAbort(llm, { apiKey: process.env.NEBIUS_API_KEY });
+		});
+	});
+
 	// Google Gemini CLI / Antigravity share the same provider, so one test covers both
 	describe("Google Gemini CLI Provider Abort", () => {
 		it.skipIf(!geminiCliToken)("should abort mid-stream", { retry: 3 }, async () => {

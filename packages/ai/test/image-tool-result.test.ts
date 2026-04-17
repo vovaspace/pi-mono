@@ -324,6 +324,18 @@ describe("Tool Results with Images", () => {
 		});
 	});
 
+	describe.skipIf(!process.env.NEBIUS_API_KEY)("Nebius Provider (moonshotai/Kimi-K2.5)", () => {
+		it("should handle tool result with only image", { retry: 3, timeout: 30000 }, async () => {
+			const llm = getModel("nebius", "moonshotai/Kimi-K2.5");
+			await handleToolWithImageResult(llm, { apiKey: process.env.NEBIUS_API_KEY });
+		});
+
+		it("should handle tool result with text and image", { retry: 3, timeout: 30000 }, async () => {
+			const llm = getModel("nebius", "moonshotai/Kimi-K2.5");
+			await handleToolWithTextAndImageResult(llm, { apiKey: process.env.NEBIUS_API_KEY });
+		});
+	});
+
 	describe.skipIf(!hasBedrockCredentials())("Amazon Bedrock Provider (claude-sonnet-4-5)", () => {
 		const llm = getModel("amazon-bedrock", "global.anthropic.claude-sonnet-4-5-20250929-v1:0");
 

@@ -383,6 +383,22 @@ describe("Context overflow error handling", () => {
 	});
 
 	// =============================================================================
+	// Nebius Token Factory
+	// Uses OpenAI-compatible Inference Router
+	// =============================================================================
+
+	describe.skipIf(!process.env.NEBIUS_API_KEY)("Nebius", () => {
+		it("Kimi-K2.5 - should detect overflow via isContextOverflow", async () => {
+			const model = getModel("nebius", "moonshotai/Kimi-K2.5");
+			const result = await testContextOverflow(model, process.env.NEBIUS_API_KEY!);
+			logResult(result);
+
+			expect(result.stopReason).toBe("error");
+			expect(isContextOverflow(result.response, model.contextWindow)).toBe(true);
+		}, 120000);
+	});
+
+	// =============================================================================
 	// z.ai
 	// Special case: may return explicit overflow error text, may accept overflow silently,
 	// or may rate limit instead
